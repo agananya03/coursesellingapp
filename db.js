@@ -1,22 +1,20 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-console.log("connected");
-mongoose.connect("")
 const ObjectId = mongoose.Types.ObjectId;
 
 
 const userSchema = new Schema({ 
-    email: {type : string , unique: true},
-    password: string,
-    firstname: string,
-    lastname: string
+    email: {type : String , unique: true},
+    password: String,
+    firstname: String,
+    lastname: String
 });
 
 const adminSchema = new Schema({
-    email: {type : string , unique: true},
-    password: string,
-    firstname: string,
-    lastname: string
+    email: {type : String , unique: true},
+    password: String,
+    firstname: String,
+    lastname: String
 });
 
 const courseSchema = new Schema({
