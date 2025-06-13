@@ -1,28 +1,15 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const { userRouter } = require("./routes/user");
+const { adminRouter } = require("./routes/admin");
+const { coursesRouter } = require("./routes/courses");
+
 const app = express();
-const jwt = require("jsonwebtoken");
+console.log("userRouter:", userRouter);
+console.log("adminRouter:", adminRouter);
+console.log("coursesRouter:", coursesRouter);
 
-
-
-app.post('/signup' , function(req , res) {
-
-});
-
-app.post('/login' , function(req , res) {
-
-});
-
-app.get('/purchased' , function(req , res) {
-
-});
-
-app.get('/courses' , function(req , res) {
-
-});
-
-app.post('/purchase' , function (req , res) {
-
-});
+app.use("/api/v1/user" , userRouter);
+app.use("/api/v1/admin" , adminRouter);
+app.use("/api/v1/courses" , coursesRouter);
 
 app.listen(3000);
