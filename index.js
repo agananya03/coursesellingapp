@@ -2,9 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 require('dotenv').config();
 
-const app = express(); // ✅ Move this up
-
-app.use(express.json()); // ✅ Now this is after app is defined
+const app = express();
+app.use(express.json()); 
 
 const { userRouter } = require("./routes/user");
 const { adminRouter } = require("./routes/admin");
