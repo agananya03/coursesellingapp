@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnHub - Online Course Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Home Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .featured-courses {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .course-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .course-content {
+            padding: 1.5rem;
+        }
+
+        .course-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-instructor {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .course-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        /* Auth Forms */
+        .auth-form {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 400px;
+            margin: 2rem auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-full {
+            width: 100%;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .form-switch {
+            text-align: center;
+            margin-top: 1rem;
+            color: #666;
+        }
+
+        .form-switch a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-management {
+            margin-top: 2rem;
+        }
+
+        .course-form {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .course-list {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .course-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        .course-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+            z-index: 1000;
+        }
+
+        .user-dropdown a {
+            display: block;
+            padding: 0.8rem 1rem;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .user-dropdown a:hover {
+            background: #f8f9fa;
+        }
+
+        .user-dropdown a:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <div class="logo">Coursera</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showSection('home')">Home</a></li>
+                <li><a href="#" onclick="showSection('courses')">Courses</a></li>
+                <li><a href="#" onclick="showSection('about')">About</a></li>
+                <li><a href="#" onclick="showSection('contact')">Contact</a></li>
+            </ul>
+            <div class="auth-buttons" id="authButtons">
+                <a href="#" class="btn btn-secondary" onclick="showSection('signin')">Sign In</a>
+                <a href="#" class="btn btn-primary" onclick="showSection('signup')">Sign Up</a>
+            </div>
+            <div class="user-menu hidden" id="userMenu">
+                <button class="btn btn-primary" onclick="toggleUserDropdown()" id="userButton">User</button>
+                <div class="user-dropdown hidden" id="userDropdown">
+                    <a href="#" onclick="showSection('profile')">Profile</a>
+                    <a href="#" onclick="showSection('my-courses')">My Courses</a>
+                    <a href="#" onclick="showSection('dashboard')" id="dashboardLink" class="hidden">Dashboard</a>
+                    <a href="#" onclick="logout()">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content container">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <h1>Learn Without Limits</h1>
+                <p>Discover thousands of courses taught by industry experts</p>
+                <div class="search-bar">
+                    <input type="text" placeholder="What do you want to learn?" id="searchInput">
+                    <button class="search-btn" onclick="searchCourses()">🔍</button>
+                </div>
+            </div>
+            
+            <div class="featured-courses">
+                <h2>Featured Courses</h2>
+                <div class="courses-grid" id="coursesGrid">
+                    <!-- Courses will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Courses Section -->
+        <section id="courses" class="section">
+            <div class="featured-courses">
+                <h2>All Courses</h2>
+                <div class="courses-grid" id="allCoursesGrid">
+                    <!-- All courses will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Sign In Section -->
+        <section id="signin" class="section">
+            <form class="auth-form" onsubmit="signIn(event)">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: #667eea;">Sign In</h2>
+                <div class="form-group">
+                    <label for="signinEmail">Email</label>
+                    <input type="email" id="signinEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="signinPassword">Password</label>
+                    <input type="password" id="signinPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="userType">Sign in as:</label>
+                    <select id="userType" required>
+                        <option value="user">Student</option>
+                        <option value="admin">Instructor/Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+                <div class="form-switch">
+                    Don't have an account? <a href="#" onclick="showSection('signup')">Sign Up</a>
+                </div>
+            </form>
+        </section>
+
+        <!-- Sign Up Section -->
+        <section id="signup" class="section">
+            <form class="auth-form" onsubmit="signUp(event)">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: #667eea;">Sign Up</h2>
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupUserType">Register as:</label>
+                    <select id="signupUserType" required>
+                        <option value="user">Student</option>
+                        <option value="admin">Instructor/Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Sign Up</button>
+                <div class="form-switch">
+                    Already have an account? <a href="#" onclick="showSection('signin')">Sign In</a>
+                </div>
+            </form>
+        </section>
+
+        <!-- Dashboard Section (Admin/Instructor) -->
+        <section id="dashboard" class="section">
+            <div class="dashboard">
+                <div class="dashboard-header">
+                    <h2>Instructor Dashboard</h2>
+                    <button class="btn btn-primary" onclick="toggleCourseForm()">Add New Course</button>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCourses">0</div>
+                        <div>Total Courses</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalStudents">0</div>
+                        <div>Total Students</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalRevenue">$0</div>
+                        <div>Total Revenue</div>
+                    </div>
+                </div>
+
+                <div class="course-management">
+                    <div class="course-form hidden" id="courseForm">
+                        <h3>Add New Course</h3>
+                        <form onsubmit="addCourse(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="courseTitle">Course Title</label>
+                                    <input type="text" id="courseTitle" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="coursePrice">Price ($)</label>
+                                    <input type="number" id="coursePrice" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="courseDescription">Description</label>
+                                <input type="text" id="courseDescription" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="courseCategory">Category</label>
+                                <select id="courseCategory" required>
+                                    <option value="Programming">Programming</option>
+                                    <option value="Design">Design</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Marketing">Marketing</option>
+                                    <option value="Data Science">Data Science</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Course</button>
+                        </form>
+                    </div>
+
+                    <div class="course-list">
+                        <h3>Your Courses</h3>
+                        <div id="instructorCourses">
+                            <!-- Instructor's courses will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="section">
+            <div class="auth-form">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: #667eea;">Profile</h2>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="profileName" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="profileEmail" readonly>
+                </div>
+                <div class="form-group">
+                    <label>User Type</label>
+                    <input type="text" id="profileUserType" readonly>
+                </div>
+                <button class="btn btn-primary btn-full" onclick="editProfile()">Edit Profile</button>
+            </div>
+        </section>
+
+        <!-- My Courses Section -->
+        <section id="my-courses" class="section">
+            <div class="featured-courses">
+                <h2>My Enrolled Courses</h2>
+                <div class="courses-grid" id="myCoursesGrid">
+                    <!-- User's enrolled courses will be populated here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <div class="featured-courses">
+                <h2>About LearnHub</h2>
+                <p style="font-size: 1.1rem; line-height: 1.8; color: #555;">
+                    LearnHub is a cutting-edge online learning platform that connects passionate learners with expert instructors from around the world. Our mission is to make quality education accessible to everyone, regardless of location or background.
+                </p>
+                <br>
+                <p style="font-size: 1.1rem; line-height: 1.8; color: #555;">
+                    With thousands of courses across various disciplines including technology, business, arts, and sciences, we provide learners with the tools they need to advance their careers and pursue their passions.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="auth-form">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: #667eea;">Contact Us</h2>
+                <form onsubmit="submitContact(event)">
+                    <div class="form-group">
+                        <label for="contactName">Name</label>
+                        <input type="text" id="contactName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactEmail">Email</label>
+                        <input type="email" id="contactEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactMessage">Message</label>
+                        <textarea id="contactMessage" rows="5" style="width: 100%; padding: 0.8rem; border: 2px solid #e1e5e9; border-radius: 10px;" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Global state management
+        let currentUser = null;
+        let courses = [
+            {
+                id: 1,
+                title: "Complete Web Development Bootcamp",
+                instructor: "Dr. Sarah Johnson",
+                price: 99.99,
+                description: "Learn HTML, CSS, JavaScript, React, Node.js and more",
+                category: "Programming",
+                students: 15420
+            },
+            {
+                id: 2,
+                title: "Digital Marketing Mastery",
+                instructor: "Mark Thompson",
+                price: 79.99,
+                description: "Master SEO, Social Media, Email Marketing & Analytics",
+                category: "Marketing",
+                students: 8934
+            },
+            {
+                id: 3,
+                title: "Data Science with Python",
+                instructor: "Prof. Emily Chen",
+                price: 129.99,
+                description: "Python, Pandas, NumPy, Machine Learning & Data Visualization",
+                category: "Data Science",
+                students: 12156
+            },
+            {
+                id: 4,
+                title: "UI/UX Design Fundamentals",
+                instructor: "Alex Rivera",
+                price: 89.99,
+                description: "Learn design principles, Figma, user research & prototyping",
+                category: "Design",
+                students: 9876
+            },
+            {
+                id: 5,
+                title: "Business Strategy & Leadership",
+                instructor: "Michael Brown",
+                price: 149.99,
+                description: "Strategic thinking, team management & business growth",
+                category: "Business",
+                students: 7654
+            },
+            {
+                id: 6,
+                title: "Mobile App Development",
+                instructor: "Lisa Wang",
+                price: 119.99,
+                description: "React Native, Flutter & native iOS/Android development",
+                category: "Programming",
+                students: 11234
+            }
+        ];
+
+        let users = [];
+        let enrollments = [];
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            populateCourses();
+            checkAuthState();
+        });
+
+        // Navigation functions
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+        }
+
+        // Populate courses in the grid
+        function populateCourses() {
+            const coursesGrid = document.getElementById('coursesGrid');
+            const allCoursesGrid = document.getElementById('allCoursesGrid');
+            
+            const courseHTML = courses.map(course => `
+                <div class="course-card">
+                    <div class="course-image">📚</div>
+                    <div class="course-content">
+                        <div class="course-title">${course.title}</div>
+                        <div class="course-instructor">by ${course.instructor}</div>
+                        <div class="course-price">$${course.price}</div>
+                        <button class="btn btn-primary" onclick="enrollCourse(${course.id})">
+                            ${currentUser && isEnrolled(course.id) ? 'View Course' : 'Enroll Now'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            if (coursesGrid) coursesGrid.innerHTML = courseHTML.slice(0, 3); // Show first 3 on home
+            if (allCoursesGrid) allCoursesGrid.innerHTML = courseHTML;
+        }
+
+        // Authentication functions
+        function signIn(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('signinEmail').value;
+            const password = document.getElementById('signinPassword').value;
+            const userType = document.getElementById('userType').value;
+
+            // Simple validation (in real app, this would be server-side)
+            const user = users.find(u => u.email === email && u.password === password && u.userType === userType);
+            
+            if (user) {
+                currentUser = user;
+                updateAuthState();
+                showSection('home');
+                alert('Sign in successful!');
+            } else {
+                alert('Invalid credentials or user not found!');
+            }
+        }
+
+        function signUp(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const userType = document.getElementById('signupUserType').value;
+
+            // Check if user already exists
+            if (users.find(u => u.email === email)) {
+                alert('User with this email already exists!');
+                return;
+            }
+
+            // Create new user
+            const newUser = {
+                id: users.length + 1,
+                name,
+                email,
+                password,
+                userType
+            };
+
+            users.push(newUser);
+            currentUser = newUser;
+            updateAuthState();
+            showSection('home');
+            alert('Account created successfully!');
+        }
+
+        function logout() {
+            currentUser = null;
+            updateAuthState();
+            showSection('home');
+            alert('Logged out successfully!');
+        }
+
+        function updateAuthState() {
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userButton = document.getElementById('userButton');
+            const dashboardLink = document.getElementById('dashboardLink');
+
+            if (currentUser) {
+                authButtons.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                userButton.textContent = currentUser.name;
+                
+                if (currentUser.userType === 'admin') {
+                    dashboardLink.classList.remove('hidden');
+                } else {
+                    dashboardLink.classList.add('hidden');
+                }
+
+                updateProfile();
+                updateMyCoursesSection();
+                if (currentUser.userType === 'admin') {
+                    updateDashboard();
+                }
+            } else {
+                authButtons.classList.remove('hidden');
+                userMenu.classList.add('hidden');
+            }
+
+            populateCourses(); // Refresh courses to update enroll buttons
+        }
+
+        function checkAuthState() {
+            // In a real app, this would check for stored auth tokens
+            updateAuthState();
+        }
+
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Course management functions
+        function enrollCourse(courseId) {
+            if (!currentUser) {
+                alert('Please sign in to enroll in courses!');
+                showSection('signin');
+                return;
+            }
+
+            if (isEnrolled(courseId)) {
+                alert('You are already enrolled in this course!');
+                return;
+            }
+
+            enrollments.push({
+                userId: currentUser.id,
+                courseId: courseId,
+                enrolledAt: new Date()
+            });
+
+            alert('Successfully enrolled in the course!');
+            populateCourses();
+            updateMyCoursesSection();
+        }
+
+        function isEnrolled(courseId) {
+            if (!currentUser) return false;
+            return enrollments.some(e => e.userId === currentUser.id && e.courseId === courseId);
+        }
+
+        function updateMyCoursesSection() {
+            if (!currentUser) return;
+
+            const myCoursesGrid = document.getElementById('myCoursesGrid');
+            const userEnrollments = enrollments.filter(e => e.userId === currentUser.id);
+            const enrolledCourses = courses.filter(c => userEnrollments.some(e => e.courseId === c.id));
+
+            if (enrolledCourses.length === 0) {
+                myCoursesGrid.innerHTML = '<p style="text-align: center; color: #666;">You haven\'t enrolled in any courses yet.</p>';
+                return;
+            }
+
+            const courseHTML = enrolledCourses.map(course => `
+                <div class="course-card">
+                    <div class="course-image">📚</div>
+                    <div class="course-content">
+                        <div class="course-title">${course.title}</div>
+                        <div class="course-instructor">by ${course.instructor}</div>
+                        <div class="course-price">${course.price}</div>
+                        <button class="btn btn-primary">Continue Learning</button>
+                    </div>
+                </div>
+            `).join('');
+
+            myCoursesGrid.innerHTML = courseHTML;
+        }
+
+        // Admin/Instructor Dashboard functions
+        function toggleCourseForm() {
+            const courseForm = document.getElementById('courseForm');
+            courseForm.classList.toggle('hidden');
+        }
+
+        function addCourse(event) {
+            event.preventDefault();
+            
+            const title = document.getElementById('courseTitle').value;
+            const price = parseFloat(document.getElementById('coursePrice').value);
+            const description = document.getElementById('courseDescription').value;
+            const category = document.getElementById('courseCategory').value;
+
+            const newCourse = {
+                id: courses.length + 1,
+                title,
+                instructor: currentUser.name,
+                price,
+                description,
+                category,
+                students: 0
+            };
+
+            courses.push(newCourse);
+            populateCourses();
+            updateDashboard();
+            toggleCourseForm();
+            
+            // Reset form
+            document.getElementById('courseTitle').value = '';
+            document.getElementById('coursePrice').value = '';
+            document.getElementById('courseDescription').value = '';
+            
+            alert('Course added successfully!');
+        }
+
+        function updateDashboard() {
+            if (!currentUser || currentUser.userType !== 'admin') return;
+
+            const instructorCourses = courses.filter(c => c.instructor === currentUser.name);
+            const totalStudents = instructorCourses.reduce((sum, course) => sum + course.students, 0);
+            const totalRevenue = instructorCourses.reduce((sum, course) => sum + (course.price * course.students), 0);
+
+            // Update stats
+            document.getElementById('totalCourses').textContent = instructorCourses.length;
+            document.getElementById('totalStudents').textContent = totalStudents;
+            document.getElementById('totalRevenue').textContent = `${totalRevenue.toFixed(2)}`;
+
+            // Update course list
+            const instructorCoursesDiv = document.getElementById('instructorCourses');
+            if (instructorCourses.length === 0) {
+                instructorCoursesDiv.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">No courses created yet.</p>';
+                return;
+            }
+
+            const courseListHTML = instructorCourses.map(course => `
+                <div class="course-item">
+                    <div>
+                        <strong>${course.title}</strong>
+                        <div style="color: #666; font-size: 0.9rem;">${course.students} students • ${course.price}</div>
+                    </div>
+                    <div class="course-actions">
+                        <button class="btn btn-warning btn-small" onclick="editCourse(${course.id})">Edit</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteCourse(${course.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+
+            instructorCoursesDiv.innerHTML = courseListHTML;
+        }
+
+        function editCourse(courseId) {
+            const course = courses.find(c => c.id === courseId);
+            if (!course) return;
+
+            const newTitle = prompt('Edit course title:', course.title);
+            const newPrice = prompt('Edit course price:', course.price);
+            
+            if (newTitle && newPrice) {
+                course.title = newTitle;
+                course.price = parseFloat(newPrice);
+                populateCourses();
+                updateDashboard();
+                alert('Course updated successfully!');
+            }
+        }
+
+        function deleteCourse(courseId) {
+            if (confirm('Are you sure you want to delete this course?')) {
+                courses = courses.filter(c => c.id !== courseId);
+                populateCourses();
+                updateDashboard();
+                alert('Course deleted successfully!');
+            }
+        }
+
+        // Profile management
+        function updateProfile() {
+            if (!currentUser) return;
+
+            document.getElementById('profileName').value = currentUser.name;
+            document.getElementById('profileEmail').value = currentUser.email;
+            document.getElementById('profileUserType').value = currentUser.userType === 'admin' ? 'Instructor/Admin' : 'Student';
+        }
+
+        function editProfile() {
+            const nameInput = document.getElementById('profileName');
+            const isReadonly = nameInput.readOnly;
+
+            if (isReadonly) {
+                nameInput.readOnly = false;
+                nameInput.focus();
+                event.target.textContent = 'Save Changes';
+            } else {
+                currentUser.name = nameInput.value;
+                nameInput.readOnly = true;
+                event.target.textContent = 'Edit Profile';
+                updateAuthState();
+                alert('Profile updated successfully!');
+            }
+        }
+
+        // Search functionality
+        function searchCourses() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (!searchTerm) return;
+
+            const filteredCourses = courses.filter(course => 
+                course.title.toLowerCase().includes(searchTerm) ||
+                course.description.toLowerCase().includes(searchTerm) ||
+                course.category.toLowerCase().includes(searchTerm)
+            );
+
+            // Show courses section with filtered results
+            const allCoursesGrid = document.getElementById('allCoursesGrid');
+            if (filteredCourses.length === 0) {
+                allCoursesGrid.innerHTML = '<p style="text-align: center; color: #666;">No courses found matching your search.</p>';
+            } else {
+                const courseHTML = filteredCourses.map(course => `
+                    <div class="course-card">
+                        <div class="course-image">📚</div>
+                        <div class="course-content">
+                            <div class="course-title">${course.title}</div>
+                            <div class="course-instructor">by ${course.instructor}</div>
+                            <div class="course-price">${course.price}</div>
+                            <button class="btn btn-primary" onclick="enrollCourse(${course.id})">
+                                ${currentUser && isEnrolled(course.id) ? 'View Course' : 'Enroll Now'}
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                allCoursesGrid.innerHTML = courseHTML;
+            }
+
+            showSection('courses');
+        }
+
+        // Contact form
+        function submitContact(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const message = document.getElementById('contactMessage').value;
+
+            // In a real app, this would send the message to a server
+            alert(`Thank you ${name}! Your message has been sent. We'll get back to you at ${email}.`);
+            
+            // Reset form
+            document.getElementById('contactName').value = '';
+            document.getElementById('contactEmail').value = '';
+            document.getElementById('contactMessage').value = '';
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('userMenu');
+            const dropdown = document.getElementById('userDropdown');
+            
+            if (!userMenu.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Add some demo users for testing
+        users.push(
+            {
+                id: 1,
+                name: 'John Doe',
+                email: 'john@example.com',
+                password: 'password123',
+                userType: 'user'
+            },
+            {
+                id: 2,
+                name: 'Jane Smith',
+                email: 'jane@example.com',
+                password: 'admin123',
+                userType: 'admin'
+            }
+        );
+
+        // Simulate some enrollments
+        enrollments.push(
+            { userId: 1, courseId: 1, enrolledAt: new Date() },
+            { userId: 1, courseId: 3, enrolledAt: new Date() }
+        );
+    </script>
+</body>
+</html>

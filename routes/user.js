@@ -4,7 +4,7 @@ const userRouter = Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
-const { userModel, purchaseModel } = require("../db");
+const { userModel, purchaseModel, courseModel } = require("../db");
 const {usermiddleware} = require("../middlewares/user")
 
 
@@ -87,9 +87,12 @@ userRouter.get('/purchased' , async function(req , res) {
     const purchases = await purchaseModel.find({
         userId
     })
-    
+    const courseData = await courseModel.find({
+        _id : {$in : purchases.map(x => x.courseId)}
+    })
     res.json({
-        purchases 
+        purchases,
+        courseData
     })
 });
 
